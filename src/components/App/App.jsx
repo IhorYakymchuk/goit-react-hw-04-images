@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { toastNotifyInfo, toastNotifyError } from '../../services/toastNotify';
 
-import { fetchImges } from '../../services/api';
+import { fetchImages } from '../../services/api';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Modal from 'components/Modal';
@@ -30,7 +30,7 @@ export default function App() {
       return;
     }
     toggleIsLoading();
-    fetchImges(page, searchQuery)
+    fetchImages(page, searchQuery)
       .then(response => {
         setImages(prevState => [...prevState, ...response.data.hits]);
         setLastPage(Math.ceil(response.data.totalHits / 12));
@@ -44,8 +44,14 @@ export default function App() {
           toastNotifyError('Error', error.message);
         }
       })
+      // .finally(() => {
+      //   if (lastPage === 0) {
+      //     toastNotifyInfo('No data found on your request');
+      //   }
+      // });
       .finally(toggleIsLoading);
   }, [page, searchQuery]);
+  // , [page, searchQuery, lastPage]);
 
   const handleSearchSubmit = searchQuery => {
     setPage(1);
@@ -54,8 +60,7 @@ export default function App() {
     setSearchQuery(searchQuery);
   };
 
-  const handleClickOnLoadMoreButton = event => {
-    event.preventDefault();
+  const handleClickOnLoadMoreButton = () => {
     setPage(prevState => prevState + 1);
   };
 
