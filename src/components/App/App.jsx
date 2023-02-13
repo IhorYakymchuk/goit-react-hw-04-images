@@ -20,9 +20,9 @@ export default function App() {
   const [lastPage, setLastPage] = useState(1);
 
   // useEffect(() => {
-  //   if (lastPage === 0) {
-  //     toastNotifyInfo('No data found on your request');
-  //   }
+  // if (lastPage === 0) {
+  //   toastNotifyInfo('No data found on your request');
+  // }
   // }, [lastPage]);
 
   useEffect(() => {
@@ -34,6 +34,9 @@ export default function App() {
       .then(response => {
         setImages(prevState => [...prevState, ...response.data.hits]);
         setLastPage(Math.ceil(response.data.totalHits / 12));
+        if (page === Math.ceil(response.data.totalHits / 12)) {
+          toastNotifyInfo('No data found on your request');
+        }
       })
       .catch(function (error) {
         if (error.response) {
@@ -44,15 +47,8 @@ export default function App() {
           toastNotifyError('Error', error.message);
         }
       })
-      .finally(() => {
-        if (lastPage < page) {
-          toastNotifyInfo('No data found on your request');
-        }
-      });
-  }, [page, searchQuery, lastPage]);
-  // ============================================================================
-  //     .finally(toggleIsLoading);
-  // }, [page, searchQuery]);
+      .finally(toggleIsLoading);
+  }, [page, searchQuery]);
 
   const handleSearchSubmit = searchQuery => {
     setPage(1);
