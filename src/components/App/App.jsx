@@ -19,11 +19,11 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
 
-  useEffect(() => {
-    if (lastPage === 0) {
-      toastNotifyInfo('No data found on your request');
-    }
-  }, [lastPage]);
+  // useEffect(() => {
+  //   if (lastPage === 0) {
+  //     toastNotifyInfo('No data found on your request');
+  //   }
+  // }, [lastPage]);
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -44,14 +44,15 @@ export default function App() {
           toastNotifyError('Error', error.message);
         }
       })
-      // .finally(() => {
-      //   if (lastPage === 0) {
-      //     toastNotifyInfo('No data found on your request');
-      //   }
-      // });
-      .finally(toggleIsLoading);
-  }, [page, searchQuery]);
-  // , [page, searchQuery, lastPage]);
+      .finally(() => {
+        if (lastPage < page) {
+          toastNotifyInfo('No data found on your request');
+        }
+      });
+  }, [page, searchQuery, lastPage]);
+  // ============================================================================
+  //     .finally(toggleIsLoading);
+  // }, [page, searchQuery]);
 
   const handleSearchSubmit = searchQuery => {
     setPage(1);
