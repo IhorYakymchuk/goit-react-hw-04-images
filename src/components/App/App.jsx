@@ -35,7 +35,7 @@ export default function App() {
         setImages(prevState => [...prevState, ...response.data.hits]);
         setLastPage(Math.ceil(response.data.totalHits / 12));
         if (page === Math.ceil(response.data.totalHits / 12)) {
-          toastNotifyInfo('No data found on your request');
+          toastNotifyInfo('No more data found on your request');
         }
       })
       .catch(function (error) {
